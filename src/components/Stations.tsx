@@ -1,40 +1,40 @@
 import ListStation from "../components/ListStation";
-import debounce from "lodash.debounce";
 import useSWR from "swr";
-import { Icon, List } from "@raycast/api";
+import { List, Toast, showToast } from "@raycast/api";
+import { Station } from "../types";
 import { getStations } from "../lib/stations";
 import { useState } from "react";
 
-export default function Stations() {
-  const [search, setSearch] = useState<string>("");
+interface StationsProps {
+  onSelectStation: (station: Station) => void;
+}
 
-  const { data, error, isLoading } = useSWR(["stations", search], () => getStations(search), {
+export default function Stations({ onSelectStation }: StationsProps) {
+  const [search, setSearch] = useState<string>("T-centralen");
+
+  const { data, isLoading, isValidating } = useSWR(["stations", search], () => getStations(search), {
     keepPreviousData: true,
+    onError: (error) => {
+      showToast({
+        title: error.response.data.title,
+        message: error.response.data.description,
+        style: Toast.Style.Failure,
+      });
+    },
   });
 
   return (
     <List
-      onSearchTextChange={debounce(setSearch, 200)}
-      searchBarPlaceholder="Search stations"
-      navigationTitle="Stations"
-      isLoading={isLoading}
       filtering={false}
+      isLoading={isLoading || isValidating}
+      navigationTitle="Stations"
+      onSearchTextChange={setSearch}
+      searchBarPlaceholder="Search stations"
+      throttle
     >
-      {data?.length ? (
-        data.map((station) => <ListStation key={[station.Name, station.Location].join("-")} station={station} />)
-      ) : error ? (
-        <List.EmptyView
-          description="We could unfortunately not retrieve any stations"
-          icon={Icon.ExclamationMark}
-          title="Something went wrong"
-        />
-      ) : (
-        <List.EmptyView
-          description="Search for a metro or bus station in Stockholm"
-          icon={Icon.Train}
-          title="Search for a station"
-        />
-      )}
+      {data?.map((station) => (
+        <ListStation onSelect={onSelectStation} key={[station.Name, station.Location].join("-")} station={station} />
+      ))}
     </List>
   );
 }

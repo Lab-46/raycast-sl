@@ -1,17 +1,23 @@
 import { Action, ActionPanel, Icon, List } from "@raycast/api";
-import { ListStation as ListStationType } from "../types";
+import { Station } from "../types";
 
 interface ListStationProps {
-  station: ListStationType;
+  onSelect: (station: Station) => void;
+  station: Station;
 }
 
-export default function ListStation({ station }: ListStationProps) {
+export default function ListStation({ onSelect, station }: ListStationProps) {
   return (
     <List.Item
       accessories={[{ icon: Icon.ArrowRight }]}
       actions={
         <ActionPanel>
-          <Action title="Select" />
+          <Action
+            title="Select"
+            onAction={() => {
+              onSelect(station);
+            }}
+          />
         </ActionPanel>
       }
       id={[station.Name, station.Location].join("-")}
