@@ -1,6 +1,6 @@
 import { Detail, useNavigation } from "@raycast/api";
-import Stations from "./components/Stations";
-import Departures from "./components/Departures";
+import Stations from "./components/stations";
+import Departures from "./components/departures";
 
 export default function Command() {
   const { push } = useNavigation();

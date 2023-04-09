@@ -1,4 +1,4 @@
-import ListStation from "../components/ListStation";
+import ListStation from "./list-station";
 import useSWR from "swr";
 import { List, Toast, showToast } from "@raycast/api";
 import { Station } from "../types";
