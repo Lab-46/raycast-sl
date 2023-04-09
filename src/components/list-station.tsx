@@ -1,9 +1,9 @@
 import { Action, ActionPanel, Icon, List } from "@raycast/api";
-import { Station } from "../types";
+import { IStation } from "../types";
 
 interface ListStationProps {
-  onSelect: (station: Station) => void;
-  station: Station;
+  onSelect: (station: IStation) => void;
+  station: IStation;
 }
 
 export default function ListStation({ onSelect, station }: ListStationProps) {

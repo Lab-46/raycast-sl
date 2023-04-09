@@ -1,4 +1,4 @@
-export interface Station {
+export interface IStation {
   Location?: string;
   Name: string;
   Products: null;
@@ -8,7 +8,7 @@ export interface Station {
   Y: string;
 }
 
-export interface Departure {
+export interface IDeparture {
   GroupOfLine: string;
   DisplayTime: string;
   TransportMode: string;

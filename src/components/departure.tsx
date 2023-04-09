@@ -1,10 +1,10 @@
-import { Departure as DepartureType } from "../types";
+import { IDeparture } from "../types";
 import { List, ActionPanel, Action, Icon, Color } from "@raycast/api";
 import { TRANSPORT_MODE_TO_ICON } from "../lib/constants";
 import { uppercaseFirst } from "../lib/utils";
 
 interface DepartureProps {
-  departure: DepartureType;
+  departure: IDeparture;
   onRefresh: () => void;
 }
 
