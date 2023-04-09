@@ -9,6 +9,8 @@ interface DepartureProps {
 }
 
 export default function Departure({ onRefresh, departure }: DepartureProps) {
+  const isDeparturingNow = departure.DisplayTime === "Nu";
+
   return (
     <List.Item
       actions={
@@ -23,31 +25,35 @@ export default function Departure({ onRefresh, departure }: DepartureProps) {
       }
       title={[departure.LineNumber, departure.Destination].join(" → ")}
       key={departure.JourneyNumber}
-      id={departure.JourneyNumber.toString()}
       icon={{
         source: TRANSPORT_MODE_TO_ICON[departure.TransportMode],
         tintColor: Color.SecondaryText,
       }}
       accessories={[
-        {
-          tag: {
-            value: departure.DisplayTime,
-            color: Color.PrimaryText,
-          },
-        },
         ...(departure.TransportMode === "METRO"
           ? [
-              {
-                text: uppercaseFirst(departure.GroupOfLine),
-              },
-              {
-                icon: {
-                  source: Icon.CircleFilled,
-                  tintColor: Color[departure.Color],
-                },
-              },
+              ...(departure.Color
+                ? [
+                    {
+                      text: {
+                        value: `${uppercaseFirst(departure.Color.toLowerCase())} line`,
+                        color: Color[departure.Color],
+                      },
+                      icon: {
+                        source: Icon.Minus,
+                        tintColor: Color[departure.Color],
+                      },
+                    },
+                  ]
+                : []),
             ]
           : []),
+        {
+          tag: {
+            value: isDeparturingNow ? "Now" : departure.DisplayTime,
+            color: isDeparturingNow ? Color.Green : Color.PrimaryText,
+          },
+        },
       ]}
     />
   );

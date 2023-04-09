@@ -1,8 +1,9 @@
-import { Action, ActionPanel, Icon, List } from "@raycast/api";
+import { Action, ActionPanel, Color, Icon, List } from "@raycast/api";
 import { IStation } from "../types";
+import { ReactNode } from "react";
 
 interface ListStationProps {
-  onSelect: (station: IStation) => void;
+  onSelect: (station: IStation) => ReactNode;
   station: IStation;
 }
 
@@ -10,17 +11,15 @@ export default function ListStation({ onSelect, station }: ListStationProps) {
   return (
     <List.Item
       accessories={[{ icon: Icon.ArrowRight }]}
+      icon={{
+        source: Icon.Geopin,
+        tintColor: Color.SecondaryText,
+      }}
       actions={
         <ActionPanel>
-          <Action
-            title="Select"
-            onAction={() => {
-              onSelect(station);
-            }}
-          />
+          <Action.Push title="Select" target={onSelect(station)} />
         </ActionPanel>
       }
-      id={[station.Name, station.Location].join("-")}
       subtitle={station.Location}
       title={station.Name}
     />

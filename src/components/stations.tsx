@@ -1,23 +1,25 @@
 import ListStation from "./list-station";
 import useSWR from "swr";
-import { List, Toast, showToast } from "@raycast/api";
 import { IStation } from "../types";
+import { List, Toast, showToast } from "@raycast/api";
+import { ReactNode, useState } from "react";
 import { getStations } from "../lib/stations";
-import { useState } from "react";
 
 interface StationsProps {
-  onSelectStation: (station: IStation) => void;
+  onSelectStation: (station: IStation) => ReactNode;
 }
 
 export default function Stations({ onSelectStation }: StationsProps) {
+  // Local state
   const [search, setSearch] = useState<string>("T-centralen");
 
+  // Server state
   const { data, isLoading, isValidating } = useSWR(["stations", search], () => getStations(search), {
     keepPreviousData: true,
     onError: (error) => {
       showToast({
-        title: error.response.data.title,
-        message: error.response.data.description,
+        title: error.response?.data?.title || "Failed to retrieve stations",
+        message: error.response?.data?.description,
         style: Toast.Style.Failure,
       });
     },
