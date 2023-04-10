@@ -4,20 +4,36 @@ import { ReactNode } from "react";
 
 interface ListStationProps {
   onSelect: (station: IStation) => ReactNode;
+  onToggleFavorite: (station: IStation) => void;
+  isFavorite?: boolean;
   station: IStation;
 }
 
-export default function ListStation({ onSelect, station }: ListStationProps) {
+export default function ListStation({ isFavorite, onSelect, onToggleFavorite, station }: ListStationProps) {
   return (
     <List.Item
-      accessories={[{ icon: Icon.ArrowRight }]}
+      accessories={[
+        ...(isFavorite ? [{ icon: { source: Icon.Heart, tintColor: Color.Red }, tooltip: "Favorite station" }] : []),
+        { icon: Icon.ArrowRight },
+      ]}
       icon={{
-        source: Icon.Pin,
+        source: Icon.Geopin,
         tintColor: Color.SecondaryText,
       }}
       actions={
         <ActionPanel>
-          <Action.Push title="Select" target={onSelect(station)} />
+          <Action.Push title="Select" target={onSelect(station)} icon={Icon.ArrowRight} />
+          <Action
+            title={isFavorite ? "Remove From Favorites" : "Add To Favorites"}
+            icon={{
+              source: isFavorite ? Icon.HeartDisabled : Icon.Heart,
+              tintColor: Color.Red,
+            }}
+            shortcut={{ modifiers: isFavorite ? ["cmd", "shift"] : ["cmd"], key: "s" }}
+            onAction={() => {
+              onToggleFavorite(station);
+            }}
+          />
         </ActionPanel>
       }
       subtitle={station.Location}
