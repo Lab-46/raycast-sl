@@ -10,4 +10,10 @@ export const TRANSPORT_MODE_TO_ICON: Record<string, Icon> = {
   SHIP: Icon.Boat,
 };
 
-export const TRANSPORT_MODES = ["metros", "buses", "trains", "trams", "ships"];
+export const TRANSPORT_MODES = [
+  { innerValue: "METRO", outerValue: "Metros" },
+  { innerValue: "BUS", outerValue: "Buses" },
+  { innerValue: "TRAIN", outerValue: "Trains" },
+  { innerValue: "TRAM", outerValue: "Trams" },
+  { innerValue: "SHIP", outerValue: "Ships" },
+];

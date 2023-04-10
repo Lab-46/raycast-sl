@@ -12,7 +12,7 @@ export default function ListStation({ onSelect, station }: ListStationProps) {
     <List.Item
       accessories={[{ icon: Icon.ArrowRight }]}
       icon={{
-        source: Icon.Geopin,
+        source: Icon.Pin,
         tintColor: Color.SecondaryText,
       }}
       actions={

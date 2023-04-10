@@ -1,10 +1,10 @@
 import Departure from "./departure";
 import useSWR from "swr";
-import { List, Toast, showToast } from "@raycast/api";
 import { IStation } from "../types";
+import { List, Toast, showToast } from "@raycast/api";
+import { TRANSPORT_MODES, TRANSPORT_MODE_TO_ICON } from "../lib/constants";
 import { getDepartures } from "../lib/departures";
 import { uppercaseFirst } from "../lib/utils";
-import { TRANSPORT_MODES } from "../lib/constants";
 import { useState } from "react";
 
 interface StationProps {
@@ -37,12 +37,19 @@ export default function Departures({ station }: StationProps) {
       isLoading={isLoading || isValidating}
       navigationTitle={station.Name}
       searchBarAccessory={
-        <List.Dropdown value={transportMode} tooltip="Transport mode" onChange={setTransportMode}>
+        <List.Dropdown onChange={setTransportMode} placeholder="Metros" tooltip="Transport mode" value={transportMode}>
           <List.Dropdown.Item title="All" value="all" key="all" />
 
-          {TRANSPORT_MODES.map((TRANSPORT_MODE) => (
-            <List.Dropdown.Item title={uppercaseFirst(TRANSPORT_MODE)} key={TRANSPORT_MODE} value={TRANSPORT_MODE} />
-          ))}
+          {TRANSPORT_MODES.map((TRANSPORT_MODE) => {
+            return (
+              <List.Dropdown.Item
+                icon={TRANSPORT_MODE_TO_ICON[TRANSPORT_MODE.innerValue]}
+                title={TRANSPORT_MODE.outerValue}
+                value={TRANSPORT_MODE.outerValue}
+                key={TRANSPORT_MODE.outerValue}
+              />
+            );
+          })}
         </List.Dropdown>
       }
     >
@@ -50,7 +57,7 @@ export default function Departures({ station }: StationProps) {
         Object.entries(data)
           .filter(([tm]) => (transportMode === "all" ? true : tm === transportMode))
           .map(([transportMode, departures]) => (
-            <List.Section key={transportMode} title={uppercaseFirst(transportMode)}>
+            <List.Section key={transportMode} title={uppercaseFirst(transportMode.toLowerCase())}>
               {departures.map((departure) => (
                 <Departure
                   key={departure.JourneyNumber}
