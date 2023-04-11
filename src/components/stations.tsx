@@ -1,4 +1,4 @@
-import ListStation from "./list-station";
+import Station from "./station";
 import useSWR from "swr";
 import { IStation } from "../types";
 import { List, Toast, showToast } from "@raycast/api";
@@ -14,7 +14,11 @@ export default function Stations({ onSelectStation }: StationsProps) {
   const [search, setSearch] = useState<string>("");
 
   // Server state
-  const { data, isLoading, isValidating } = useSWR(["stations", search], () => getStations(search), {
+  const {
+    data: stationsData,
+    isLoading: isStationsLoading,
+    isValidating: isStationsValidating,
+  } = useSWR(["stations", search], () => getStations(search), {
     keepPreviousData: true,
     onError: (error) => {
       showToast({
@@ -34,19 +38,19 @@ export default function Stations({ onSelectStation }: StationsProps) {
   return (
     <List
       filtering={false}
-      isLoading={isLoading || isValidating || isFavoriteStationsLoading || isFavoriteStationsValidating}
+      isLoading={isStationsLoading || isStationsValidating || isFavoriteStationsLoading || isFavoriteStationsValidating}
       navigationTitle="Stations"
       onSearchTextChange={setSearch}
       searchBarPlaceholder="Search stations"
       throttle
     >
-      {data && (
+      {stationsData && (
         <List.Section title="All stations">
-          {data.map((station) => {
+          {stationsData.map((station) => {
             const isFavorite = favoriteStationsData?.some(({ SiteId }) => SiteId === station.SiteId);
 
             return (
-              <ListStation
+              <Station
                 key={[station.Name, station.Location].join("-")}
                 onSelect={onSelectStation}
                 onToggleFavorite={isFavorite ? removeStationFromFavorites : addStationToFavorites}
@@ -61,7 +65,7 @@ export default function Stations({ onSelectStation }: StationsProps) {
       {favoriteStationsData && (
         <List.Section title="Favorite stations">
           {favoriteStationsData.map((station) => (
-            <ListStation
+            <Station
               isFavorite
               key={["favorites", station.Name, station.Location].join("-")}
               onSelect={onSelectStation}

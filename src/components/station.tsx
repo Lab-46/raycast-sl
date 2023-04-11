@@ -2,24 +2,21 @@ import { Action, ActionPanel, Color, Icon, List } from "@raycast/api";
 import { IStation } from "../types";
 import { ReactNode } from "react";
 
-interface ListStationProps {
+interface StationProps {
   onSelect: (station: IStation) => ReactNode;
   onToggleFavorite: (station: IStation) => void;
   isFavorite?: boolean;
   station: IStation;
 }
 
-export default function ListStation({ isFavorite, onSelect, onToggleFavorite, station }: ListStationProps) {
+export default function Station({ isFavorite, onSelect, onToggleFavorite, station }: StationProps) {
   return (
     <List.Item
       accessories={[
         ...(isFavorite ? [{ icon: { source: Icon.Heart, tintColor: Color.Red }, tooltip: "Favorite station" }] : []),
         { icon: Icon.ArrowRight },
       ]}
-      icon={{
-        source: Icon.Geopin,
-        tintColor: Color.SecondaryText,
-      }}
+      icon={Icon.Geopin}
       actions={
         <ActionPanel>
           <Action.Push title="Select" target={onSelect(station)} icon={Icon.ArrowRight} />

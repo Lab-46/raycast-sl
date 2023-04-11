@@ -1,5 +1,5 @@
 import { IDeparture } from "../types";
-import { List, ActionPanel, Action, Icon, Color } from "@raycast/api";
+import { List, ActionPanel, Action, Icon } from "@raycast/api";
 import { TRANSPORT_MODE_TO_ICON } from "../lib/constants";
 import { getDepartureAccessories } from "../lib/departures";
 
@@ -21,12 +21,10 @@ export default function Departure({ onRefresh, departure }: DepartureProps) {
           />
         </ActionPanel>
       }
-      title={[departure.LineNumber, departure.Destination].join(departure.JourneyDirection === 1 ? " ↑ " : " ↓ ")}
+      title={[departure.LineNumber, departure.JourneyDirection === 1 ? "↑" : "↓"].join(" ")}
+      subtitle={departure.Destination}
       key={departure.JourneyNumber}
-      icon={{
-        source: TRANSPORT_MODE_TO_ICON[departure.TransportMode],
-        tintColor: Color.SecondaryText,
-      }}
+      icon={TRANSPORT_MODE_TO_ICON[departure.TransportMode]}
       accessories={getDepartureAccessories(departure)}
     />
   );

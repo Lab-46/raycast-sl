@@ -57,30 +57,24 @@ export async function addStationToFavorites(station: IStation) {
 }
 
 export async function removeStationFromFavorites(station: IStation) {
-  let favorites: IStation[] = [];
-
   try {
     const _favorites = await LocalStorage.getItem<string>("favorite-stations");
 
     if (_favorites) {
-      favorites = JSON.parse(_favorites);
+      const favorites: IStation[] = JSON.parse(_favorites);
+
+      await LocalStorage.setItem(
+        "favorite-stations",
+        JSON.stringify(favorites.filter(({ SiteId }) => SiteId !== station.SiteId))
+      );
+
+      showToast({
+        title: `Removed ${station.Name} from favorite stations`,
+        style: Toast.Style.Success,
+      });
+
+      mutate("favorite-stations");
     }
-  } catch {
-    console.info("No favorite stations");
-  }
-
-  try {
-    await LocalStorage.setItem(
-      "favorite-stations",
-      JSON.stringify(favorites.filter(({ SiteId }) => SiteId !== station.SiteId))
-    );
-
-    showToast({
-      title: `Removed ${station.Name} from favorite stations`,
-      style: Toast.Style.Success,
-    });
-
-    mutate("favorite-stations");
   } catch {
     showToast({
       title: "Failed to remove from favorite stations",
