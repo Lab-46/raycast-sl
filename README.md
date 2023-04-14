@@ -1,3 +1,3 @@
 # SL
 
-Departures, route-planning and deviations for public transport in Stockholm
+Departures for public transport in Stockholm
