@@ -1,6 +1,6 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "sl",
+  "name": "stockholm-public-transport",
   "title": "SL",
   "description": "Departures, route-planning and deviations for public transport in Stockholm",
   "icon": "command-icon.png",
