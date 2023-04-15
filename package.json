@@ -5,7 +5,6 @@
   "description": "Departures for public transport in Stockholm",
   "icon": "command-icon.png",
   "author": "albingroen",
-  "owner": "lab-46",
   "categories": [
     "Other"
   ],
